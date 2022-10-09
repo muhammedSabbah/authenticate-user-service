@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.gateway.authenticateuserservice.entities.AppUser;
+import io.gateway.authenticateuserservice.entities.GatewayResponse;
 import io.gateway.authenticateuserservice.service.AppUserService;
 
 @RestController
@@ -17,7 +18,10 @@ public class UserController {
 	@Autowired
 	private AppUserService userService;
 	
-	public ResponseEntity<List<AppUser>> getUsers() {
-		return null;
+	public ResponseEntity<GatewayResponse<List<AppUser>>> getUsers() {
+		GatewayResponse<List<AppUser>> response = new GatewayResponse<>();
+		List<AppUser> users = userService.getUsers();
+		response.setBody(users);
+		return ResponseEntity.ok().body(response);
 	}
 }
