@@ -18,6 +18,7 @@ public class AppUserServiceImpl implements AppUserService {
 	@Autowired
 	private AppUserRepository userRepository;
 	
+	@Autowired
 	private RoleRepository roleRepository;
 
 	@Override
