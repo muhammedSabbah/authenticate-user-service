@@ -1,8 +1,8 @@
-package io.getways.authenticateuserservice.service;
+package io.gateway.authenticateuserservice.service;
 
 import java.util.List;
 
-import io.getways.authenticateuserservice.entities.AppUser;
+import io.gateway.authenticateuserservice.entities.AppUser;
 
 public interface AppUserService {
 

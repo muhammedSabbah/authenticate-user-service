@@ -1,8 +1,8 @@
-package io.getways.authenticateuserservice.repo;
+package io.gateway.authenticateuserservice.repo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import io.getways.authenticateuserservice.entities.Role;
+import io.gateway.authenticateuserservice.entities.Role;
 
 public interface RoleRepository extends JpaRepository<Role, Long> {
 

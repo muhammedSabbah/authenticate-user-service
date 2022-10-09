@@ -1,4 +1,4 @@
-package io.getways.authenticateuserservice.service;
+package io.gateway.authenticateuserservice.service;
 
 import java.util.List;
 
@@ -6,10 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.getways.authenticateuserservice.entities.AppUser;
-import io.getways.authenticateuserservice.entities.Role;
-import io.getways.authenticateuserservice.repo.AppUserRepository;
-import io.getways.authenticateuserservice.repo.RoleRepository;
+import io.gateway.authenticateuserservice.entities.AppUser;
+import io.gateway.authenticateuserservice.entities.Role;
+import io.gateway.authenticateuserservice.repo.AppUserRepository;
+import io.gateway.authenticateuserservice.repo.RoleRepository;
 
 @Service
 @Transactional

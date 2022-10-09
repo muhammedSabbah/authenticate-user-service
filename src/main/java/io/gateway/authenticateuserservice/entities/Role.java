@@ -1,4 +1,4 @@
-package io.getways.authenticateuserservice.entities;
+package io.gateway.authenticateuserservice.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
