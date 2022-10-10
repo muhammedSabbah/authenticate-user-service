@@ -1,4 +1,4 @@
-package io.gateway.authenticateuserservice.entities;
+package io.gateway.authenticateuserservice.entities.request;
 
 import io.gateway.authenticateuserservice.utils.StatusCode;
 

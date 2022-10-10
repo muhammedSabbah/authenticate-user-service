@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import io.gateway.authenticateuserservice.entities.AppUser;
-import io.gateway.authenticateuserservice.entities.GatewayResponse;
-import io.gateway.authenticateuserservice.entities.Header;
+import io.gateway.authenticateuserservice.entities.model.RoleUserForm;
+import io.gateway.authenticateuserservice.entities.request.GatewayResponse;
+import io.gateway.authenticateuserservice.entities.request.Header;
 import io.gateway.authenticateuserservice.exception.GatewayBusinessException;
-import io.gateway.authenticateuserservice.model.RoleUserForm;
 import io.gateway.authenticateuserservice.service.AppUserService;
 import io.gateway.authenticateuserservice.utils.StatusCode;
 
