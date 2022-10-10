@@ -1,4 +1,4 @@
-package io.gateway.authenticateuserservice.entities;
+package io.gateway.authenticateuserservice.entities.request;
 
 public class GatewayResponse<T> {
 

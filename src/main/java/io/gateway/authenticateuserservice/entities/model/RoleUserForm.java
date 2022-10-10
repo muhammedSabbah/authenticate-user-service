@@ -1,4 +1,4 @@
-package io.gateway.authenticateuserservice.model;
+package io.gateway.authenticateuserservice.entities.model;
 
 public class RoleUserForm {
 

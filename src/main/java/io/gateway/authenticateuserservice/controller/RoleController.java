@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import io.gateway.authenticateuserservice.entities.GatewayResponse;
-import io.gateway.authenticateuserservice.entities.Header;
 import io.gateway.authenticateuserservice.entities.Role;
+import io.gateway.authenticateuserservice.entities.request.GatewayResponse;
+import io.gateway.authenticateuserservice.entities.request.Header;
 import io.gateway.authenticateuserservice.service.RoleService;
 
 @RestController
