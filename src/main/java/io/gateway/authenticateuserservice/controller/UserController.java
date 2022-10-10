@@ -15,8 +15,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import io.gateway.authenticateuserservice.entities.AppUser;
 import io.gateway.authenticateuserservice.entities.GatewayResponse;
 import io.gateway.authenticateuserservice.entities.Header;
+import io.gateway.authenticateuserservice.exception.GatewayBusinessException;
 import io.gateway.authenticateuserservice.model.RoleUserForm;
 import io.gateway.authenticateuserservice.service.AppUserService;
+import io.gateway.authenticateuserservice.utils.StatusCode;
 
 @RestController
 @RequestMapping("${app.version}")
@@ -28,8 +30,13 @@ public class UserController {
 	@GetMapping("/users")
 	public ResponseEntity<GatewayResponse<List<AppUser>>> getUsers() {
 		GatewayResponse<List<AppUser>> response = new GatewayResponse<>();
-		List<AppUser> users = userService.getUsers();
-		Header header = new Header(101L, "SUCCESS");
+		Header header = new Header(StatusCode.SUCCESS);
+		List<AppUser> users = null;
+		try {
+			users = userService.getUsers();
+		} catch (GatewayBusinessException e) {
+			header = new Header((long)e.getErrorCode(), e.getMessage());
+		}
 		response.setHeader(header);
 		response.setBody(users);
 		return ResponseEntity.ok().body(response);
@@ -38,8 +45,13 @@ public class UserController {
 	@PostMapping("/user/save")
 	public ResponseEntity<GatewayResponse<AppUser>> saveUser(@RequestBody AppUser user) {
 		GatewayResponse<AppUser> response = new GatewayResponse<>();
-		AppUser savedUser = userService.saveUser(user);
-		Header header = new Header(101L, "SUCCESS");
+		Header header = new Header(StatusCode.SUCCESS);
+		AppUser savedUser = null;
+		try {
+			savedUser = userService.saveUser(user);
+		} catch (GatewayBusinessException e) {
+			header = new Header((long)e.getErrorCode(), e.getMessage());
+		}
 		response.setHeader(header);
 		response.setBody(savedUser);
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path(
@@ -50,8 +62,12 @@ public class UserController {
 	@PostMapping("/user/add/role")
 	public ResponseEntity<GatewayResponse<?>> addRoleToUser(@RequestBody RoleUserForm roleUserForm) {
 		GatewayResponse<AppUser> response = new GatewayResponse<>();
-		userService.addRoleToUser(roleUserForm.getUsername(), roleUserForm.getRoleName());
-		Header header = new Header(101L, "SUCCESS");
+		Header header = new Header(StatusCode.SUCCESS);
+		try {
+			userService.addRoleToUser(roleUserForm.getUsername(), roleUserForm.getRoleName());
+		} catch (GatewayBusinessException e) {
+			header = new Header((long)e.getErrorCode(), e.getMessage());
+		}
 		response.setHeader(header);
 		return ResponseEntity.ok().body(response);
 	}
