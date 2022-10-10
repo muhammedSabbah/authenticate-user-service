@@ -30,7 +30,8 @@ public class AppUserServiceImpl implements AppUserService {
 	public void addRoleToUser(String username, String roleName) {
 		AppUser user = userRepository.findByUsername(username);
 		Role role = roleRepository.findByName(roleName);
-		user.getRoles().add(role);
+		if (!user.getRoles().contains(role))
+			user.getRoles().add(role);
 	}
 
 	@Override
