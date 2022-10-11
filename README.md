@@ -9,3 +9,6 @@ Login Form
 HTTP authentication
 custom authentication method
 ```
+
+> Authorization
+Decides if you have permission to access the resources
