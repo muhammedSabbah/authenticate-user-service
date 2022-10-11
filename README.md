@@ -12,3 +12,9 @@ custom authentication method
 
 > Authorization
 Decides if you have permission to access the resources
+
+Methods:
+```
+Access control URLs
+Access Control List
+```
