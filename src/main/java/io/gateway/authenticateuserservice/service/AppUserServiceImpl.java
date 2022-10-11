@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +31,9 @@ public class AppUserServiceImpl implements UserDetailsService, AppUserService {
 	@Autowired
 	private RoleRepository roleRepository;
 	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		System.out.println("LOAD USER : " + username);
@@ -48,6 +52,7 @@ public class AppUserServiceImpl implements UserDetailsService, AppUserService {
 
 	@Override
 	public AppUser saveUser(AppUser user) throws GatewayBusinessException {
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		return userRepository.save(user);
 	}
 

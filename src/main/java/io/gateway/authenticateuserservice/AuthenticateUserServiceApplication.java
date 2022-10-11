@@ -32,8 +32,7 @@ public class AuthenticateUserServiceApplication {
 			roleService.saveRole(new Role(null, "ROLE_USER"));
 			roleService.saveRole(new Role(null, "ROLE_ADMIN"));
 			
-			String password = new BCryptPasswordEncoder().encode("123");
-			userService.saveUser(new AppUser(null, "SABBAH", "SABBAH", password, new ArrayList<>()));
+			userService.saveUser(new AppUser(null, "SABBAH", "SABBAH", "123", new ArrayList<>()));
 			
 		};
 
