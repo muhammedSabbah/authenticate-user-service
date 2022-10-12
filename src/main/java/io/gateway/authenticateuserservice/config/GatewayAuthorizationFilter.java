@@ -15,12 +15,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
-@Component
+
 public class GatewayAuthorizationFilter extends OncePerRequestFilter {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -28,9 +27,11 @@ public class GatewayAuthorizationFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
+		logger.info("Authentication Request For '{}'", request.getRequestURL());
 		String authorizationHeader = request.getHeader(AUTHORIZATION);
 		String token = null;
 		String username = null;
+		
 		if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
 			token = authorizationHeader.substring("Bearer ".length());
 			try {
@@ -44,6 +45,7 @@ public class GatewayAuthorizationFilter extends OncePerRequestFilter {
 			logger.warn("JWT_TOKEN_DOES_NOT_START_WITH_BEARER_STRING");
 		}
 
+		logger.info("JWT_TOKEN_USERNAME_VALUE '{}'", username);
 		if (username != null) {
 			String[] roles = WebToken.getRoles(token);
 			Collection<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
