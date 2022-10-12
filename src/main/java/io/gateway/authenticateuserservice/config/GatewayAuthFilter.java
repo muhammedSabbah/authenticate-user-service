@@ -19,6 +19,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import static io.gateway.authenticateuserservice.config.TOKEN_TYPE.*;
+
 public class GatewayAuthFilter extends UsernamePasswordAuthenticationFilter {
 	
 	private final AuthenticationManager authenticationManager;
@@ -41,8 +43,8 @@ public class GatewayAuthFilter extends UsernamePasswordAuthenticationFilter {
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
 		User user = (User) authResult.getPrincipal();
 		Map<String, String> tokens = new HashMap<>();
-		tokens.put(TOKEN_TYPE.ACCESS_TOKEN.value(), WebToken.generateToken(user, TOKEN_TYPE.ACCESS_TOKEN));
-		tokens.put(TOKEN_TYPE.REFRESH_TOKEN.value(), WebToken.generateToken(user, TOKEN_TYPE.REFRESH_TOKEN));
+		tokens.put(ACCESS_TOKEN.value(), WebToken.generateToken(user, ACCESS_TOKEN));
+		tokens.put(REFRESH_TOKEN.value(), WebToken.generateToken(user, REFRESH_TOKEN));
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 		new ObjectMapper().writeValue(response.getOutputStream(), tokens);
 	}

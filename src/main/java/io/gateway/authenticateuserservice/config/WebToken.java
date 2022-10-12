@@ -1,8 +1,7 @@
 package io.gateway.authenticateuserservice.config;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -10,6 +9,8 @@ import org.springframework.security.core.userdetails.User;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.auth0.jwt.interfaces.JWTVerifier;
 
 public class WebToken {
 	private static final String SECRET = "secret";
@@ -21,16 +22,14 @@ public class WebToken {
 	}
 	
 	public static String generateToken(User user, TOKEN_TYPE token) {
-		Map<String, Object> claims = new HashMap<>();
-		claims.put(ROLES, user.getAuthorities().stream()
-						.map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
-		return generateToken(claims, user.getUsername(), token);
+		List<String> roles = user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+		return generateToken(roles, user.getUsername(), token);
 	}
 	
-	private static String generateToken(Map<String, Object> claims, String subject, TOKEN_TYPE token) {
+	private static String generateToken(List<String> roles, String subject, TOKEN_TYPE token) {
 		final Date createdDate = new Date(System.currentTimeMillis());
 		return JWT.create()
-				.withPayload(claims)
+				.withClaim(ROLES, roles)
 				.withSubject(subject)
 				.withIssuedAt(createdDate)
 				.withExpiresAt(exprirationDate(createdDate, token))
@@ -46,4 +45,17 @@ public class WebToken {
 		return expiresAt.before(new Date(System.currentTimeMillis()));
 	}
 	
+	private static DecodedJWT generateJWT(String token) {
+		JWTVerifier verifier = JWT.require(algorithm()).build();
+		return verifier.verify(token);
+	}
+	
+	public static String getUsername(String token) {
+		return generateJWT(token).getSubject();
+	}
+	
+	public static String[] getRoles(String token) {
+		String[] roles = generateJWT(token).getClaim(ROLES).asArray(String.class);
+		return roles;
+	}
 }

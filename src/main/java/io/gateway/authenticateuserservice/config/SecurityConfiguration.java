@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import io.gateway.authenticateuserservice.utils.USER_ROLE;
 
@@ -45,6 +46,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/v1.0/user/save/**").hasAnyAuthority(USER_ROLE.ROLE_SUPER_ADMIN.value());
 		http.authorizeRequests().anyRequest().authenticated();
 		http.addFilter(filter);
+		http.addFilterBefore(new GatewayAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 	}
 
 	@Bean
