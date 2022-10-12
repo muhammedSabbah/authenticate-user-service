@@ -10,6 +10,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,29 +23,38 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 @Component
 public class GatewayAuthorizationFilter extends OncePerRequestFilter {
 
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		String authorizationHeader = request.getHeader(AUTHORIZATION);
-		System.out.println("START GatewayAuthorizationFilter : " + authorizationHeader);
+		String token = null;
+		String username = null;
 		if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+			token = authorizationHeader.substring("Bearer ".length());
 			try {
-				String token = authorizationHeader.substring("Bearer ".length());
-				String username = WebToken.getUsername(token);
-				String[] roles = WebToken.getRoles(token);
-				Collection<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
-				Arrays.asList(roles).stream().forEach(role -> {
-					authorities.add(new SimpleGrantedAuthority(role));
-				});
-				UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, null, authorities);
-				SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-				filterChain.doFilter(request, response);
+				username = WebToken.getUsernameFromToken(token);
+			} catch (IllegalArgumentException illegal) {
+				logger.error("JWT_TOKEN_Illegal_Argument_Exception", illegal.getMessage());
 			} catch (Exception ex) {
-				System.out.println("ERROR Login -> " + ex.getMessage());
+				logger.error("JWT_TOKEN_UNABLE_TO_GET_USERNAME", ex.getMessage());
 			}
 		} else {
-			filterChain.doFilter(request, response);
+			logger.warn("JWT_TOKEN_DOES_NOT_START_WITH_BEARER_STRING");
 		}
+
+		if (username != null) {
+			String[] roles = WebToken.getRoles(token);
+			Collection<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
+			Arrays.asList(roles).stream().forEach(role -> {
+				authorities.add(new SimpleGrantedAuthority(role));
+			});
+			UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,
+					null, authorities);
+			SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+		}
+		filterChain.doFilter(request, response);
 	}
 
 }
