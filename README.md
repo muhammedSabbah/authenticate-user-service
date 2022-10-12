@@ -18,6 +18,7 @@ Methods:
 Access control URLs
 Access Control List
 ```
-> we can login into application using this url http://localhost:8080/login and username and password
+> At First Login using this url http://localhost:8080/login
+it requires username and password to authenticate who access the application
 > Response is an access and refresh tokens
 ![alt text](https://github.com/muhammedSabbah/authenticate-user-service/blob/main/images/login.png?raw=true)
