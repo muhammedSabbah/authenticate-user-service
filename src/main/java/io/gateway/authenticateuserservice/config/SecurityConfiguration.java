@@ -38,13 +38,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		GatewayAuthFilter authFilter = new GatewayAuthFilter(authenticationManagerBean());
-		authFilter.setFilterProcessesUrl("/api/v1.0/login");
+		authFilter.setFilterProcessesUrl(appVersion + "/login");
 		http.csrf().disable();
 		http.exceptionHandling().authenticationEntryPoint(new JwtUnAuthorizedResponseAuthenticationEntryPoint());
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-		http.authorizeRequests().antMatchers("/api/v1.0/login/**").permitAll();
-		http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/v1.0/users/**").hasAnyAuthority(USER_ROLE.ROLE_ADMIN.value());
-		http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/v1.0/user/save/**").hasAnyAuthority(USER_ROLE.ROLE_SUPER_ADMIN.value());
+		http.authorizeRequests().antMatchers(appVersion + "/login/**").permitAll();
+		http.authorizeRequests().antMatchers(HttpMethod.GET, appVersion + "/users/**").hasAnyAuthority(USER_ROLE.ROLE_ADMIN.value());
+		http.authorizeRequests().antMatchers(HttpMethod.POST, appVersion + "/user/save/**").hasAnyAuthority(USER_ROLE.ROLE_SUPER_ADMIN.value());
 		http.authorizeRequests().anyRequest().authenticated();
 		http.addFilter(authFilter);
 		http.addFilterBefore(new GatewayAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
