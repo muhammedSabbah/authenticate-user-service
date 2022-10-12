@@ -30,7 +30,7 @@ public class WebToken {
 	private static String generateToken(Map<String, Object> claims, String subject, TOKEN_TYPE token) {
 		final Date createdDate = new Date(System.currentTimeMillis());
 		return JWT.create()
-				.withClaim(ROLES, claims)
+				.withPayload(claims)
 				.withSubject(subject)
 				.withIssuedAt(createdDate)
 				.withExpiresAt(exprirationDate(createdDate, token))
