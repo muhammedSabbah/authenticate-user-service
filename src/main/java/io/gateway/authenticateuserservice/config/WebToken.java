@@ -50,7 +50,7 @@ public class WebToken {
 		return verifier.verify(token);
 	}
 	
-	public static String getUsername(String token) {
+	public static String getUsernameFromToken(String token) {
 		return generateJWT(token).getSubject();
 	}
 	
